@@ -1,6 +1,6 @@
 # TaskFlow - gRPC + SQLAlchemy + React + moonrepo
 
-Monorepo с moon.
+Monorepo with moon.
 
 ## Stack
 - Backend: Python, gRPC, SQLAlchemy (SQLite), pytest
@@ -8,27 +8,27 @@ Monorepo с moon.
 - Proto: proto/tasks.proto
 - Orchestration: moonrepo
 
-## Структура
+## Structure
 ```
 apps/backend - Python gRPC server
 apps/frontend - React client
-proto/tasks.proto - контракт
+proto/tasks.proto - contract
 ```
 
-## Запуск (требуется moon, python3.11, node20)
+## Running (requires moon, python3.11, node20)
 
 moon run backend:install
-moon run backend:generate  # генерирует python gRPC код из proto
-moon run backend:run  # :50051 gRPC, :8000 HTTP bridge для web
+moon run backend:generate  # generates Python gRPC code from proto
+moon run backend:run  # :50051 gRPC, :8000 HTTP bridge for web
 
-в другом терминале:
+in another terminal:
 moon run frontend:install
 moon run frontend:dev  # http://localhost:5173
 
-## Тесты
+## Tests
 moon run backend:test
 moon run frontend:test
-moon run :test  # все сразу
+moon run :test  # all at once
 ```
 
-Проект: TaskFlow - CRUD для задач с статусами, приоритетами, фильтрами.
+Project: TaskFlow - CRUD for tasks with statuses, priorities, and filters.

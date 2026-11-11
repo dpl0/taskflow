@@ -29,24 +29,24 @@ export default function App(){
   return (
     <div style={{maxWidth:900, margin:'0 auto', padding:'32px 16px'}}>
       <h1 style={{fontSize:32, fontWeight:800, letterSpacing:-1}}>TaskFlow <span style={{color:'#888', fontWeight:400, fontSize:16}}>gRPC + SQLAlchemy + React + moon</span></h1>
-      <p style={{color:'#888'}}>Бэкенд: Python gRPC на :50051, HTTP-bridge :8000. Фронт: React через HTTP bridge (в проде замени на grpc-web).</p>
+      <p style={{color:'#888'}}>Backend: Python gRPC on :50051, HTTP bridge :8000. Frontend: React via HTTP bridge (replace with grpc-web in production).</p>
 
       <form onSubmit={onCreate} className="card" style={{display:'flex', gap:12, marginTop:24, flexDirection:'column'}}>
         <div style={{display:'flex', gap:12}}>
-          <input className="input" placeholder="Новая задача... напр. Сделать демо" value={title} onChange={e=>setTitle(e.target.value)} />
-          <button className="btn" type="submit">Добавить</button>
+          <input className="input" placeholder="New task... e.g. Make a demo" value={title} onChange={e=>setTitle(e.target.value)} />
+          <button className="btn" type="submit">Add</button>
         </div>
-        <input className="input" placeholder="Описание (опционально)" value={desc} onChange={e=>setDesc(e.target.value)} />
+        <input className="input" placeholder="Description (optional)" value={desc} onChange={e=>setDesc(e.target.value)} />
       </form>
 
       <div style={{display:'flex', gap:8, marginTop:20}}>
         {[0,1,2,3].map(s => (
           <button key={s} onClick={()=>setFilter(s)} className="btn" style={{background: filter===s ? '#fff':'#222', color: filter===s ? '#000':'#fff'}}>{s===0 ? 'ALL' : statusLabel[s]}</button>
         ))}
-        <button onClick={refresh} className="btn" style={{marginLeft:'auto', background:'#222', color:'#fff'}}>↻ Обновить</button>
+        <button onClick={refresh} className="btn" style={{marginLeft:'auto', background:'#222', color:'#fff'}}>↻ Refresh</button>
       </div>
 
-      {loading ? <p>Загрузка...</p> : (
+      {loading ? <p>Loading...</p> : (
         <div style={{display:'grid', gap:12, marginTop:16}}>
           {filtered.map(t=>(
             <div key={t.id} className="card" style={{display:'flex', justifyContent:'space-between', opacity: t.completed ? .6 : 1}}>
@@ -62,12 +62,12 @@ export default function App(){
               <button onClick={async ()=>{ await deleteTask(t.id); setTasks(prev=>prev.filter(x=>x.id!==t.id)) }} style={{background:'transparent', border:0, color:'#666', cursor:'pointer'}}>✕</button>
             </div>
           ))}
-          {filtered.length===0 && <div className="card" style={{textAlign:'center', color:'#666'}}>Задач нет. Создай первую!</div>}
+          {filtered.length===0 && <div className="card" style={{textAlign:'center', color:'#666'}}>No tasks. Create the first one!</div>}
         </div>
       )}
 
       <div className="card" style={{marginTop:32, fontSize:12, color:'#666'}}>
-        <b>Как это работает:</b> proto/tasks.proto → Python gRPC server (SQLAlchemy) → FastAPI bridge /api → React (TypeScript). Тесты: pytest для бэка, vitest для фронта. Запуск через moonrepo.
+        <b>How it works:</b> proto/tasks.proto → Python gRPC server (SQLAlchemy) → FastAPI bridge /api → React (TypeScript). Tests: pytest for the backend, vitest for the frontend. Run via moonrepo.
       </div>
     </div>
   )

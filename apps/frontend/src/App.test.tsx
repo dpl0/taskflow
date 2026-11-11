@@ -9,6 +9,6 @@ describe('TaskFlow App', () => {
   })
   it('has input for new task', () => {
     render(<App />)
-    expect(screen.getByPlaceholderText(/Новая задача/)).toBeInTheDocument()
+    expect(screen.getByPlaceholderText(/New task/)).toBeInTheDocument()
   })
 })

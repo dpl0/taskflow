@@ -1,6 +1,3 @@
-version: '1.0'
 projects:
-  backend:
-    root: apps/backend
-  frontend:
-    root: apps/frontend
+  backend: "apps/backend"
+  frontend: "apps/frontend"

@@ -3,6 +3,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src/generated'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../src'))
 
 import tasks_pb2
+import grpc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from src.database import Base
@@ -57,3 +58,9 @@ def test_update_and_delete():
 
     fetched = svc.GetTask(tasks_pb2.GetTaskRequest(id=task.id), ctx)
     assert ctx.code == 5  # NOT_FOUND
+
+def test_create_empty_title():
+    svc = get_service()
+    ctx = DummyContext()
+    svc.CreateTask(tasks_pb2.CreateTaskRequest(title="   "), ctx)
+    assert ctx.code == grpc.StatusCode.INVALID_ARGUMENT

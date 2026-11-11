@@ -4,6 +4,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'generated'))
 from sqlalchemy.orm import Session
 from .models import TaskModel
 from .database import Base, engine
+import grpc
 import tasks_pb2
 import uuid
 from datetime import datetime
@@ -27,6 +28,10 @@ class TaskServiceImpl:
         self.db_factory = db_factory
 
     def CreateTask(self, request, context):
+        if not request.title.strip():
+            context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+            context.set_details("invalid argument: title is required")
+            return tasks_pb2.Task()
         db: Session = self.db_factory()
         try:
             task = TaskModel(

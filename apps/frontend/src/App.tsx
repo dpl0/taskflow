@@ -10,6 +10,7 @@ export default function App(){
   const [desc, setDesc] = useState('')
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<number>(0)
+  const [error, setError] = useState<string | null>(null)
 
   const refresh = async () => {
     try { setTasks(await listTasks()) } finally { setLoading(false) }
@@ -18,10 +19,14 @@ export default function App(){
 
   const onCreate = async (e: React.FormEvent) => {
     e.preventDefault()
-    if(!title.trim()) return
-    const t = await createTask({title, description:desc, status:1, priority:2})
-    setTasks(prev=>[t, ...prev])
-    setTitle(''); setDesc('')
+    setError(null)
+    try {
+      const t = await createTask({title, description:desc, status:1, priority:2})
+      setTasks(prev=>[t, ...prev])
+      setTitle(''); setDesc('')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'invalid argument')
+    }
   }
 
   const filtered = tasks.filter(t => filter===0 || t.status===filter)
@@ -38,6 +43,13 @@ export default function App(){
         </div>
         <input className="input" placeholder="Description (optional)" value={desc} onChange={e=>setDesc(e.target.value)} />
       </form>
+
+      {error && (
+        <div className="alert" role="alert">
+          <span>{error}</span>
+          <button onClick={()=>setError(null)} aria-label="Dismiss" style={{background:'transparent', border:0, color:'#f88', cursor:'pointer', fontSize:16, lineHeight:1}}>✕</button>
+        </div>
+      )}
 
       <div style={{display:'flex', gap:8, marginTop:20}}>
         {[0,1,2,3].map(s => (

@@ -5,3 +5,4 @@ body { font-family: Inter, system-ui, sans-serif; background:#0a0a0b; color:#e5e
 .btn:disabled { opacity:.5 }
 .input { background:#1e1e20; border:1px solid #2e2e32; color:#fff; padding:10px 12px; border-radius:8px; width:100%; }
 .badge { font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid #333; }
+.alert { background:#3a1111; border:1px solid #f55; color:#f88; border-radius:8px; padding:10px 14px; margin-top:16px; display:flex; justify-content:space-between; align-items:center; gap:12px; }

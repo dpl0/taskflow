@@ -18,6 +18,14 @@ export async function listTasks(): Promise<Task[]> {
 
 export async function createTask(payload: {title:string, description:string, status:number, priority:number}): Promise<Task> {
   const res = await fetch(`${API}/tasks`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)})
+  if (!res.ok) {
+    let detail = `HTTP ${res.status}`
+    try {
+      const body = await res.json()
+      if (body?.detail) detail = String(body.detail)
+    } catch {}
+    throw new Error(detail)
+  }
   return res.json()
 }
 

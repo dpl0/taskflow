@@ -24,7 +24,7 @@ def serve_grpc():
 
 # Simple HTTP bridge for React frontend (to avoid needing Envoy for gRPC-Web)
 def serve_http():
-    from fastapi import FastAPI
+    from fastapi import FastAPI, HTTPException
     from fastapi.middleware.cors import CORSMiddleware
     import uvicorn
     from .database import SessionLocal
@@ -51,10 +51,13 @@ def serve_http():
 
     @app.post("/api/tasks")
     def create_task(payload: dict):
+        title = (payload.get("title") or "").strip()
+        if not title:
+            raise HTTPException(status_code=400, detail="invalid argument: title is required")
         db = SessionLocal()
         try:
             import uuid
-            task = TaskModel(id=str(uuid.uuid4()), title=payload.get("title",""), description=payload.get("description",""), status=payload.get("status",1), priority=payload.get("priority",2))
+            task = TaskModel(id=str(uuid.uuid4()), title=title, description=payload.get("description",""), status=payload.get("status",1), priority=payload.get("priority",2))
             db.add(task); db.commit(); db.refresh(task)
             return {"id": task.id, "title": task.title, "description": task.description, "status": task.status, "priority": task.priority, "completed": task.completed}
         finally:
